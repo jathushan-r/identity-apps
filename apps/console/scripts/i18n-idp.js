@@ -36,29 +36,20 @@ function createFile(filePath, data, options, checkIfExists) {
 // eslint-disable-next-line no-console
 const log = console.log;
 
-log("Pre build script started.....");
-
-// Run the clean script.
-execSync("pnpm clean:build");
-
-// Run theme content copying to source script.
-execSync("pnpm copy:themes:src");
-
-// Copy i18n defaults used for text branding from login app.
-execSync("pnpm copy:branding:i18n:defaults");
+log("i18n-idp build script started.....");
 
 // Path of the build directory.
-const distDirectory = path.join(__dirname, "..", "src", "extensions", "i18n", "dist", "src");
+const distDirectory = path.join(__dirname, "..", "src", "features", "identity-providers", "i18n", "dist", "src");
 const i18nNodeModulesDir = path.join(__dirname, "..", "node_modules", "@wso2is", "i18n", "dist", "bundle");
 
-log("Compiling i18N extensions...");
+log("Compiling i18N feature/idp...");
 
 try {
-    execSync("pnpm compile:i18n");
+    execSync("pnpm compile:i18n-idp");
 } catch (e) {
     log(e);
 }
-log("Completed compiling i18n extensions.");
+log("Completed compiling i18n idp.");
 
 const i18NTempExtensionsPath = path.join(distDirectory, "resources");
 const i18nExtensions = require(i18NTempExtensionsPath);
@@ -72,22 +63,25 @@ const namespaces = [];
 log("Moving extensions.json files to the build directory");
 
 for (const value of Object.values(i18nExtensions)) {
-    if (!value || !value.name || !value.extensions) {
+    if (!value || !value.name || !value.identityProviders) {
         continue;
     }
 
-    const fileContent = JSON.stringify(value.extensions, undefined, 4);
+    const fileContent = JSON.stringify(value.identityProviders, undefined, 4);
     const hash = crypto
         .createHash("sha1")
         .update(JSON.stringify(fileContent))
         .digest("hex");
-    const fileName = `extensions.${hash.substr(0, 8)}.json`;
+    const fileName = `identityProviders.${hash.substr(0, 8)}.json`;
     const filePath = path.join(i18nNodeModulesDir, value.name, "portals", fileName);
 
     createFile(filePath, fileContent, null, true);
 
     // Update the name of the extensions file in the meta.json file.
-    meta[value.name].paths.extensions = meta[value.name].paths.extensions.replace("{hash}", hash.substr(0, 8));
+    meta[value.name].paths.identityProviders = meta[value.name].paths.identityProviders.replace(
+        "{hash}",
+        hash.substr(0, 8)
+    );
 
     // Capture existing namespaces.
     namespaces.push(value.name);
@@ -96,7 +90,7 @@ for (const value of Object.values(i18nExtensions)) {
 // Remove non-existent namespaces from the meta.json file.
 Object.keys(meta).forEach(key => {
     if (!namespaces.includes(key)) {
-        delete meta[key].paths.extensions;
+        delete meta[key].paths.identityProviders;
     }
 });
 
@@ -117,32 +111,6 @@ const newMetaFilePath = path.join(tmpDir, newMetaFileName);
 createFile(newMetaFilePath, JSON.stringify(meta, undefined, 4));
 
 log("Cleaning the tmp directory...");
-execSync("pnpm clean:i18n:dist");
+execSync("pnpm clean:i18n-idp:dist");
 
-execSync("pnpm build:i18n-idp");
-
-// Path of the build directory.
-const layoutsDirectory = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "identity-apps-core",
-    "components",
-    "login-portal-layouts",
-    "layouts"
-);
-const layoutsSrc = path.join(__dirname, "..", "src", "login-portal-layouts");
-
-// Remove the src directory if it exists.
-if (fs.existsSync(layoutsSrc)) {
-    log("Removing existing layouts directory in src");
-    fs.removeSync(layoutsSrc);
-}
-
-// Copy the layouts directory to the src directory.
-fs.copySync(layoutsDirectory, layoutsSrc);
-
-log("Moving layouts to the build directory");
-
-log("\nFinishing up the pre build script.....");
+log("\nFinishing up the i18n-idp build script.....");

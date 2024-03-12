@@ -21,7 +21,6 @@ const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs-extra");
 
-
 // eslint-disable-next-line no-console
 const log = console.log;
 
@@ -29,6 +28,7 @@ const OUTPUT_DIR_NAME = "bundle";
 const META_FILE_NAME = "meta.{hash}.json";
 const TRANSLATIONS_FOLDER_NAME = "translations";
 const EXTENSIONS_FILENAME = "extensions.{hash}.json";
+const IDP_FILENAME = "identityProviders.{hash}.json";
 
 // Path for the distribution directory.
 const dist = path.join(__dirname, "..", "dist");
@@ -44,11 +44,12 @@ log("Running @wso2is/i18n module's post build script.");
 // Check if the `dist` and the `translations` folder exists and if not terminate the script.
 // If the folders doesn't exist that means the build hasn't been performed.
 if (!fs.existsSync(dist) || !fs.existsSync(translationsPath)) {
-
     log("\nERROR in @wso2is/i18 module");
 
-    log("\nCould not locate the i18 translation build artifacts." +
-        "Please execute the build command before running this script.");
+    log(
+        "\nCould not locate the i18 translation build artifacts." +
+            "Please execute the build command before running this script."
+    );
 
     // Terminate the script.
     process.exit();
@@ -71,13 +72,11 @@ let metaFileContent = {};
 
 // Create directories to store the locales for the corresponding language.
 for (const value of Object.values(translations)) {
-
     const langDirPath = path.join(outputPath, value.meta.code);
 
     let resourcePaths = {};
 
     if (!value || !value.meta || !value.meta.code || !value.resources) {
-
         log("\nWARNING - Could not find the relevant locale meta or resources for the language");
 
         break;
@@ -89,7 +88,7 @@ for (const value of Object.values(translations)) {
     log("\nCreating a directory for the language - " + value.meta.name + "\n");
 
     // Iterate through the resources object to extract the sub folders.
-    for (const [ objKey, objValue ] of Object.entries(value.resources)) {
+    for (const [objKey, objValue] of Object.entries(value.resources)) {
         const subFolderPath = path.join(langDirPath, objKey);
 
         createDirectory(subFolderPath, true);
@@ -97,9 +96,12 @@ for (const value of Object.values(translations)) {
         log("Creating " + objKey + " sub folder to store relevant namespace resources.");
 
         // Extract and create the JSON files from the namespaces.
-        for (const [ nsObjKey, nsObjValue ] of Object.entries(objValue)) {
-            const hash = crypto.createHash("sha1").update(JSON.stringify(nsObjValue)).digest("hex");
-            const fileName = `${ nsObjKey }.${ hash.substr(0, 8) }.json`;
+        for (const [nsObjKey, nsObjValue] of Object.entries(objValue)) {
+            const hash = crypto
+                .createHash("sha1")
+                .update(JSON.stringify(nsObjValue))
+                .digest("hex");
+            const fileName = `${nsObjKey}.${hash.substr(0, 8)}.json`;
             const filePath = path.join(subFolderPath, fileName);
 
             createFile(filePath, JSON.stringify(nsObjValue, undefined, 4), null, true);
@@ -108,30 +110,47 @@ for (const value of Object.values(translations)) {
 
             resourcePaths = {
                 ...resourcePaths,
-                [ nsObjKey ]: path.join(value.meta.code, objKey, fileName).split(path.sep).join(path.posix.sep)
+                [nsObjKey]: path
+                    .join(value.meta.code, objKey, fileName)
+                    .split(path.sep)
+                    .join(path.posix.sep)
             };
         }
 
         // Add extensions.json file to the path
         resourcePaths = {
             ...resourcePaths,
-            extensions: path.join(value.meta.code, objKey, EXTENSIONS_FILENAME).split(path.sep).join(path.posix.sep)
+            extensions: path
+                .join(value.meta.code, objKey, EXTENSIONS_FILENAME)
+                .split(path.sep)
+                .join(path.posix.sep),
+            identityProviders: path
+                .join(value.meta.code, objKey, IDP_FILENAME)
+                .split(path.sep)
+                .join(path.posix.sep)
         };
     }
 
     metaFileContent = {
         ...metaFileContent,
-        [ value.meta.code ] : {
+        [value.meta.code]: {
             ...value.meta,
             paths: resourcePaths
         }
     };
 }
 
-const hash = crypto.createHash("sha1").update(JSON.stringify(metaFileContent)).digest("hex");
+const hash = crypto
+    .createHash("sha1")
+    .update(JSON.stringify(metaFileContent))
+    .digest("hex");
 
-createFile(path.join(outputPath, META_FILE_NAME.replace("{hash}", hash.substr(0, 8))),
-    JSON.stringify(metaFileContent, undefined, 4), null, true);
+createFile(
+    path.join(outputPath, META_FILE_NAME.replace("{hash}", hash.substr(0, 8))),
+    JSON.stringify(metaFileContent, undefined, 4),
+    null,
+    true
+);
 
 log("\nCreated the locale meta file.");
 
@@ -145,7 +164,6 @@ log("\nClean up task finished successfully......");
 
 // Function to create directories.
 function createDirectory(dirPath, checkIfExists) {
-
     if (!checkIfExists) {
         fs.mkdirSync(dirPath);
 
@@ -159,7 +177,6 @@ function createDirectory(dirPath, checkIfExists) {
 
 // Function to create files.
 function createFile(filePath, data, options, checkIfExists) {
-
     if (!checkIfExists) {
         fs.writeFileSync(filePath, data, options);
 
