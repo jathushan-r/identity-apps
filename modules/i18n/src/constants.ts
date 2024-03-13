@@ -20,7 +20,6 @@
  * Class containing i18n module constants.
  */
 export class I18nModuleConstants {
-
     /**
      * Private constructor to avoid object instantiation from outside
      * the class.
@@ -28,7 +27,7 @@ export class I18nModuleConstants {
      * @hideconstructor
      */
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    private constructor() { }
+    private constructor() {}
 
     /**
      * Name of the i18n module.
@@ -69,6 +68,13 @@ export class I18nModuleConstants {
      * @default
      */
     public static readonly EXTENSIONS_NAMESPACE: string = "extensions";
+    /**
+     * IDP namespace.
+     * @constant
+     * @type {string}
+     * @default
+     */
+    public static readonly IDP_NAMESPACE: string = "idp";
 
     /**
      * Default fallback language.
