@@ -37,7 +37,8 @@ const i18nDir = path.join(__dirname, "..", "build", "console", appFolder, "resou
 
 if (fs.existsSync(tmpDir)) {
     const metaFiles = fs.readdirSync(tmpDir);
-    const metaFileName = metaFiles ? metaFiles.filter(file => file.startsWith("meta"))[ 0 ] : null;
+    const metaFileName = metaFiles ? metaFiles.filter(file => file.startsWith("meta"))[0] : null;
+    log(`🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥${metaFileName}🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥`);
 
     const i18nFiles = fs.readdirSync(i18nDir);
 
