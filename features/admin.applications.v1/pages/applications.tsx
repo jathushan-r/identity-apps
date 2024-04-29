@@ -77,6 +77,9 @@ import { ApplicationManagementConstants } from "../constants";
 import CustomApplicationTemplate
     from "../data/application-templates/templates/custom-application/custom-application.json";
 import { ApplicationAccessTypes, ApplicationListInterface, ApplicationListItemInterface } from "../models";
+import {default as Oxygen_Button }from '@oxygen-ui/react/Button';
+
+import {PlusIcon} from '@oxygen-ui/react-icons';
 
 const APPLICATIONS_LIST_SORTING_OPTIONS: DropdownItemProps[] = [
     {
@@ -540,6 +543,18 @@ const ApplicationsPage: FunctionComponent<ApplicationsPageInterface> = (
                 <Show
                     when={ featureConfig?.applications?.scopes?.create }
                 >
+                    <Oxygen_Button
+                        color="primary"
+                        variant="contained"
+                        onClick={ (): void => {
+                            eventPublisher.publish("application-click-new-application-button");
+                            history.push(AppConstants.getPaths().get("APPLICATION_TEMPLATES"));
+                        } }
+                        data-testid={ `${ testId }-list-layout-add-button` }
+                        startIcon={ <PlusIcon/> }
+                    >
+                        { t("applications:list.actions.add").toString() }
+                    </Oxygen_Button>
                     <PrimaryButton
                         onClick={ (): void => {
                             eventPublisher.publish("application-click-new-application-button");

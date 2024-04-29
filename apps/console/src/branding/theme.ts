@@ -36,7 +36,7 @@ export const AsgardeoTheme: Theme = extendTheme({
                     }
                 },
                 primary: {
-                    main: "#ff7300"
+                    main: "#ff9"
                 }
             }
         },
@@ -45,26 +45,27 @@ export const AsgardeoTheme: Theme = extendTheme({
                 customComponents: {
                     AppShell: {
                         Main: {
-                            background: "#FAF9F8"
+                            background: "#D4F1F4"
                         },
                         MainWrapper: {
-                            background: "#F6F4F2"
+                            background: "#75E6DA"
                         }
                     },
                     Navbar: {
-                        background: "#F6F4F2",
-                        collapsibleItemBackground: "#E7E4E2"
+                        background: "#94C973",
+                        collapsibleItemBackground: "#18A558"
                     }
                 },
                 gradients: {
                     primary: {
-                        stop1: "#EB4F63",
-                        stop2: "#FA7B3F"
+                        stop1: "#0000FF",
+                        stop2: "#2E8BC0"
                     }
                 },
                 primary: {
-                    main: "#ff7300"
-                }
+                    main: "#31ED31"
+                },
+
             }
         }
     },
@@ -72,7 +73,7 @@ export const AsgardeoTheme: Theme = extendTheme({
         MuiAppBar: {
             styleOverrides: {
                 root: {
-                    backgroundColor: "#F6F4F2",
+                    backgroundColor: "#929EAD",
                     borderBottom: "none"
                 }
             }
@@ -108,11 +109,23 @@ export const AsgardeoTheme: Theme = extendTheme({
                     padding: "0.67857143em 1em"
                 },
                 root: {
-                    fontFamily: "Gilmer, sans-serif"
+                    fontFamily: "Cedarville Cursive, cursive"
+                }
+            }
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: "#8B0000", // Deep red background color for buttons
+                    color: "white", // Text color for buttons to ensure readability
+                    "&:hover": {
+                        backgroundColor: "#640000" // Slightly darker red on hover for visual feedback
+                    }
                 }
             }
         }
     },
+
     customComponents: {
         AppShell: {
             properties: {
@@ -122,7 +135,7 @@ export const AsgardeoTheme: Theme = extendTheme({
         },
         Navbar: {
             properties: {
-                "chip-background-color": "#a333c8",
+                "chip-background-color": "#8A8AFF",
                 "chip-color": "var(--oxygen-palette-primary-contrastText)"
             }
         }
@@ -131,9 +144,9 @@ export const AsgardeoTheme: Theme = extendTheme({
         borderRadius: 8
     },
     typography: {
-        fontFamily: "Gilmer, sans-serif",
+        fontFamily: "Cedarville Cursive, cursive",
         h1: {
-            fontWeight: 700
+            fontWeight: 1200
         }
     }
 });
