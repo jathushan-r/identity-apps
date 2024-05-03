@@ -171,8 +171,12 @@
         "appCopyright": "${copyright} ${year} WSO2 LLC.",
         "appTitle": "WSO2 Identity Server Console",
         "appName": "Console",
-        "appLogoPath": "/assets/images/branding/logo.svg",
-        "appWhiteLogoPath": "/assets/images/branding/logo-inverted.svg",
+        "appLogoPath": "/assets/images/branding/logo-full.svg",
+        "appWhiteLogoPath": "/assets/images/branding/logo-full-inverted.svg",
+        "appLogo": {
+            "defaultLogoPath": "/assets/images/branding/logo.svg",
+            "defaultWhiteLogoPath": "/assets/images/branding/logo-inverted.svg"
+        },
         "emailTemplates": {
             "defaultLogoUrl": "/libs/themes/default/assets/images/branding/logo.svg",
             "defaultWhiteLogoUrl": "/libs/themes/default/assets/images/branding/logo-inverted.svg"
