@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "name": "@wso2is/admin.authorization.v1",
+    "version": "2.19.2",
+    "description": "WSO2 Identity Server Console",
+    "author": "WSO2",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "react": "^18.2.0"
+    },
+    "browserslist": [
+        "> 0.2%"
+    ]
+}
